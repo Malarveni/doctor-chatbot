@@ -3,7 +3,7 @@ from dotenv import load_dotenv
 
 from fastapi import FastAPI, HTTPException
 from fastapi.middleware.cors import CORSMiddleware
-from fastapi.responses import HTMLResponse
+from fastapi.responses import HTMLResponse, FileResponse
 from fastapi.staticfiles import StaticFiles
 
 from pydantic import BaseModel
@@ -19,10 +19,10 @@ load_dotenv()
 # --------------------------------------------------
 api_key = os.getenv("GROQ_API_KEY")
 if not api_key:
-    raise RuntimeError("GROQ_API_KEY is missing. Check your .env file.")
+    # This print helps debug logs in Render if it fails
+    print("Error: GROQ_API_KEY not found.") 
 
 client = Groq(api_key=api_key)
-
 
 # --------------------------------------------------
 # FastAPI app
@@ -42,11 +42,6 @@ app.add_middleware(
     allow_methods=["*"],
     allow_headers=["*"],
 )
-
-# --------------------------------------------------
-# Serve static frontend files (CSS, JS)
-# --------------------------------------------------
-app.mount("/static", StaticFiles(directory="frontend"), name="static")
 
 # --------------------------------------------------
 # Request & Response Models
@@ -77,7 +72,7 @@ Rules:
 """
 
 # --------------------------------------------------
-# Chat API
+# Chat API Route
 # --------------------------------------------------
 @app.post("/chat", response_model=ChatResponse)
 def chat_with_doctor_assistant(request: ChatRequest):
@@ -97,12 +92,24 @@ def chat_with_doctor_assistant(request: ChatRequest):
         )
 
     except Exception as e:
+        print(f"Error: {e}") # Print error to logs
         raise HTTPException(status_code=500, detail=str(e))
 
 # --------------------------------------------------
-# Homepage Route (SERVES FRONTEND)
+# Serve Frontend Files (Updated for Flat Structure)
 # --------------------------------------------------
+
+# Serve the HTML at the root URL
 @app.get("/", response_class=HTMLResponse)
-def serve_frontend():
-    with open("frontend/index.html", "r", encoding="utf-8") as f:
-        return f.read()
+async def serve_home():
+    return FileResponse("index.html")
+
+# Serve the CSS file
+@app.get("/style.css")
+async def serve_css():
+    return FileResponse("style.css")
+
+# Serve the JS file
+@app.get("/app.js")
+async def serve_js():
+    return FileResponse("app.js")
