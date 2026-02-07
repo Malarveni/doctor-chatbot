@@ -1,11 +1,14 @@
-const API_URL = "http://127.0.0.1:8000/chat";
+// CHANGED: Use relative path. This works on Localhost AND Render automatically.
+const API_URL = "/chat"; 
 
 const chatWindow = document.getElementById("chatWindow");
 const userInput = document.getElementById("userInput");
 const sendBtn = document.getElementById("sendBtn");
 
+// Add event listener for the button
 sendBtn.addEventListener("click", sendMessage);
 
+// Add event listener for "Enter" key
 userInput.addEventListener("keydown", (e) => {
     if (e.key === "Enter" && !e.shiftKey) {
         e.preventDefault();
