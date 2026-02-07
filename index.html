@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Doctor Assistant AI</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+
+<div class="app">
+
+    <aside class="sidebar">
+        <h2>🩺 Doctor AI</h2>
+        <p>Clinical Decision Support System</p>
+    </aside>
+
+    <main class="chat-container">
+
+        <header class="chat-header">
+            <span class="status-dot"></span>
+            <div>
+                <h3>Doctor Assistant</h3>
+                <small>Evidence-based • Non-diagnostic</small>
+            </div>
+        </header>
+
+        <section class="chat-window" id="chatWindow">
+            <div class="message bot">
+                Hello Doctor. Please enter your clinical question.
+            </div>
+        </section>
+
+        <footer class="chat-input">
+            <textarea id="userInput" placeholder="Type your medical question..."></textarea>
+            <button id="sendBtn">Send</button>
+        </footer>
+
+    </main>
+</div>
+
+<script src="app.js"></script>
+</body>
+</html>
